@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proability — Probability & Stats Master Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #12151c;
+    --surface2: #1a1f2b;
+    --border: #252c3a;
+    --accent: #f0c040;
+    --accent2: #4fc3f7;
+    --accent3: #a78bfa;
+    --accent4: #34d399;
+    --accent5: #f87171;
+    --text: #e8eaf0;
+    --muted: #7a8499;
+    --heading: 'Playfair Display', serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --body: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,12,16,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 0; height: 52px;
+    overflow-x: auto;
+  }
+  nav .brand {
+    font-family: var(--heading); font-size: 1.15rem; font-weight: 900;
+    color: var(--accent); white-space: nowrap; margin-right: 2rem;
+    letter-spacing: -0.5px;
+  }
+  nav a {
+    color: var(--muted); text-decoration: none; white-space: nowrap;
+    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 0 0.9rem; height: 52px;
+    display: flex; align-items: center;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  nav a:hover, nav a.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── HERO ── */
+  .hero {
+    margin-top: 52px;
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, #1e2540 0%, transparent 70%);
+  }
+  .hero h1 {
+    font-family: var(--heading); font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 900; line-height: 1.1;
+    background: linear-gradient(135deg, var(--accent) 0%, #ffd580 50%, var(--accent2) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 0.6rem;
+  }
+  .hero p { color: var(--muted); font-size: 1rem; max-width: 560px; margin: 0 auto 1.5rem; }
+  .badge-row { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+  .badge {
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em;
+    padding: 0.25rem 0.75rem; border-radius: 3px;
+    border: 1px solid; font-weight: 600;
+  }
+  .badge-b  { color: var(--accent);  border-color: var(--accent);  background: rgba(240,192,64,0.07); }
+  .badge-nb { color: var(--accent3); border-color: var(--accent3); background: rgba(167,139,250,0.07); }
+  .badge-p  { color: var(--accent2); border-color: var(--accent2); background: rgba(79,195,247,0.07); }
+  .badge-hg { color: var(--accent4); border-color: var(--accent4); background: rgba(52,211,153,0.07); }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 1060px; margin: 0 auto; padding: 0 1.5rem; }
+
+  section { padding: 3.5rem 0; border-bottom: 1px solid var(--border); }
+  section:last-of-type { border-bottom: none; }
+
+  h2 {
+    font-family: var(--heading); font-size: 1.9rem; font-weight: 700;
+    margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.7rem;
+  }
+  h2 .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  h3 { font-family: var(--heading); font-size: 1.25rem; font-weight: 700; margin: 1.8rem 0 0.6rem; }
+  h4 { font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 1.4rem 0 0.4rem; }
+
+  p { margin-bottom: 0.8rem; }
+  ul, ol { padding-left: 1.4rem; margin-bottom: 0.8rem; }
+  li { margin-bottom: 0.3rem; }
+
+  /* ── FORMULA BOX ── */
+  .formula {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px; padding: 1rem 1.2rem; margin: 1rem 0;
+    font-family: var(--mono); font-size: 0.88rem; line-height: 1.8;
+    overflow-x: auto;
+  }
+  .formula .label {
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-bottom: 0.4rem;
+  }
+  .formula .eq { color: #f8f8f8; }
+  .formula .comment { color: var(--muted); font-size: 0.82rem; }
+
+  /* ── INFO GRID ── */
+  .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0; }
+  .info-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem 1.1rem;
+  }
+  .info-card .ic-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.4rem; font-family: var(--mono); }
+  .info-card .ic-val { font-family: var(--mono); font-size: 0.95rem; color: var(--text); }
+
+  /* ── WHEN/HOW GRID ── */
+  .wh-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+  @media(max-width:600px){ .wh-grid { grid-template-columns: 1fr; } }
+  .wh-card {
+    border-radius: 8px; padding: 1.1rem 1.2rem;
+    border: 1px solid var(--border);
+  }
+  .wh-when { background: rgba(240,192,64,0.06); border-top: 3px solid var(--accent); }
+  .wh-how  { background: rgba(79,195,247,0.06); border-top: 3px solid var(--accent2); }
+  .wh-card h4 { margin-top: 0; color: inherit; font-family: var(--body); font-size: 0.8rem; }
+  .wh-when h4 { color: var(--accent); }
+  .wh-how  h4 { color: var(--accent2); }
+
+  /* ── EXAMPLE BLOCK ── */
+  .example {
+    border: 1px solid var(--border); border-radius: 8px;
+    margin: 1.2rem 0; overflow: hidden;
+  }
+  .ex-header {
+    padding: 0.6rem 1.2rem; display: flex; align-items: center; gap: 0.6rem;
+    border-bottom: 1px solid var(--border); cursor: pointer;
+    user-select: none;
+  }
+  .ex-tag {
+    font-family: var(--mono); font-size: 0.68rem; font-weight: 600;
+    letter-spacing: 0.1em; padding: 0.2rem 0.55rem; border-radius: 3px;
+  }
+  .tag-easy { background: rgba(52,211,153,0.15); color: var(--accent4); }
+  .tag-med  { background: rgba(240,192,64,0.15);  color: var(--accent);  }
+  .tag-hard { background: rgba(248,113,113,0.15); color: var(--accent5); }
+  .ex-title { font-weight: 500; font-size: 0.9rem; flex: 1; }
+  .ex-arrow { font-size: 0.75rem; color: var(--muted); transition: transform 0.3s; }
+  .ex-body { padding: 1.2rem; display: none; }
+  .ex-body.open { display: block; }
+  .ex-body.open ~ .ex-header .ex-arrow { transform: rotate(180deg); }
+
+  .step {
+    display: flex; gap: 0.9rem; margin-bottom: 0.9rem; align-items: flex-start;
+  }
+  .step-num {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--accent); color: #000; font-weight: 700;
+    font-size: 0.72rem; display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); margin-top: 0.15rem;
+  }
+  .step-content { flex: 1; }
+
+  .answer {
+    margin-top: 1rem; padding: 0.8rem 1rem;
+    background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.3);
+    border-radius: 6px; font-family: var(--mono); font-size: 0.9rem;
+  }
+  .answer span { color: var(--accent4); font-weight: 600; }
+
+  /* ── COMPARISON TABLE ── */
+  .comp-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.82rem; }
+  .comp-table th, .comp-table td { padding: 0.65rem 0.9rem; border: 1px solid var(--border); vertical-align: top; }
+  .comp-table th { background: var(--surface2); font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .comp-table tr:hover td { background: var(--surface); }
+  .comp-table td:first-child { font-family: var(--mono); font-weight: 600; }
+
+  /* ── FLASHCARD ── */
+  .fc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0; }
+  .fc {
+    border: 1px solid var(--border); border-radius: 8px;
+    cursor: pointer; perspective: 800px; min-height: 110px;
+  }
+  .fc-inner {
+    position: relative; width: 100%; height: 100%; min-height: 110px;
+    transform-style: preserve-3d; transition: transform 0.5s;
+  }
+  .fc.flipped .fc-inner { transform: rotateY(180deg); }
+  .fc-front, .fc-back {
+    position: absolute; inset: 0; padding: 1.1rem;
+    backface-visibility: hidden; border-radius: 8px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .fc-front { background: var(--surface); }
+  .fc-back  { background: var(--surface2); transform: rotateY(180deg); }
+  .fc-q { font-size: 0.88rem; font-weight: 500; }
+  .fc-a { font-family: var(--mono); font-size: 0.82rem; color: var(--accent2); }
+  .fc-hint { font-size: 0.7rem; color: var(--muted); margin-top: 0.5rem; }
+
+  /* ── ALERT ── */
+  .alert {
+    border-radius: 6px; padding: 0.8rem 1.1rem; margin: 1rem 0;
+    font-size: 0.88rem; display: flex; gap: 0.7rem; align-items: flex-start;
+  }
+  .alert-warn { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.3); }
+  .alert-tip  { background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.3); }
+  .alert-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+  /* ── SECTION COLORS ── */
+  #binomial h2 .dot    { background: var(--accent); }
+  #negbinom h2 .dot    { background: var(--accent3); }
+  #poisson  h2 .dot    { background: var(--accent2); }
+  #hypergeo h2 .dot    { background: var(--accent4); }
+
+  /* ── QUIZ ── */
+  #quiz-section { background: var(--surface); border-radius: 12px; padding: 2rem; margin: 1rem 0; }
+  .quiz-q { margin-bottom: 1.5rem; }
+  .quiz-q .qtext { font-weight: 500; margin-bottom: 0.7rem; }
+  .quiz-opt { display: flex; flex-direction: column; gap: 0.4rem; }
+  .quiz-opt label {
+    display: flex; gap: 0.7rem; align-items: flex-start; padding: 0.6rem 0.9rem;
+    border: 1px solid var(--border); border-radius: 6px; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s; font-size: 0.88rem;
+  }
+  .quiz-opt label:hover { border-color: var(--accent); background: rgba(240,192,64,0.05); }
+  .quiz-opt input[type=radio] { margin-top: 0.2rem; accent-color: var(--accent); }
+  .quiz-btn {
+    background: var(--accent); color: #000; border: none; border-radius: 6px;
+    padding: 0.65rem 1.8rem; font-weight: 700; font-size: 0.88rem;
+    cursor: pointer; font-family: var(--mono); letter-spacing: 0.06em;
+    text-transform: uppercase; transition: opacity 0.2s;
+  }
+  .quiz-btn:hover { opacity: 0.85; }
+  #quiz-result { margin-top: 1rem; font-family: var(--mono); font-size: 0.95rem; }
+
+  /* ── SCROLL TOP ── */
+  .scroll-top {
+    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    background: var(--accent); color: #000; border: none; border-radius: 50%;
+    width: 40px; height: 40px; font-size: 1.1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 16px rgba(240,192,64,0.3); transition: opacity 0.3s;
+    opacity: 0; pointer-events: none;
+  }
+  .scroll-top.show { opacity: 1; pointer-events: auto; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:700px){
+    .hero { padding: 3rem 1rem 2rem; }
+    nav .brand { display: none; }
+    .comp-table { font-size: 0.75rem; }
+    .comp-table th, .comp-table td { padding: 0.45rem 0.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="brand">Proability 🎓</div>
+  <a href="#overview">Overview</a>
+  <a href="#binomial">Binomial</a>
+  <a href="#negbinom">Neg. Binomial</a>
+  <a href="#poisson">Poisson</a>
+  <a href="#hypergeo">Hypergeometric</a>
+  <a href="#compare">Compare</a>
+  <a href="#flashcards">Flashcards</a>
+  <a href="#quiz">Quiz</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Probability &amp; Stats<br>Master Guide</h1>
+  <p>Your complete open-note reference for discrete distributions — formulas, conditions, intuition, and worked examples from easy to hard.</p>
+  <div class="badge-row">
+    <span class="badge badge-b">Binomial</span>
+    <span class="badge badge-nb">Negative Binomial</span>
+    <span class="badge badge-p">Poisson</span>
+    <span class="badge badge-hg">Hypergeometric</span>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- OVERVIEW -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="overview">
+  <h2><span class="dot" style="background:var(--muted)"></span>Quick Decision Guide — Which Distribution?</h2>
+  <p>Before diving into each distribution, use this flowchart mentally to identify which one applies.</p>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Key Question</th>
+        <th>Binomial</th>
+        <th>Neg. Binomial</th>
+        <th>Poisson</th>
+        <th>Hypergeometric</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Fixed n trials?</td>
+        <td>✅ Yes, fixed n</td>
+        <td>❌ Trials vary</td>
+        <td>❌ No trials</td>
+        <td>✅ Yes, fixed n</td>
+      </tr>
+      <tr>
+        <td>Replacement / independence?</td>
+        <td>✅ With replacement (or large pop.)</td>
+        <td>✅ With replacement</td>
+        <td>N/A — events in time/space</td>
+        <td>❌ WITHOUT replacement</td>
+      </tr>
+      <tr>
+        <td>Counting what?</td>
+        <td># successes in n trials</td>
+        <td># trials until r-th success</td>
+        <td># events in interval</td>
+        <td># successes from finite pop.</td>
+      </tr>
+      <tr>
+        <td>Population size</td>
+        <td>Infinite / large</td>
+        <td>Infinite / large</td>
+        <td>Infinite (events in time)</td>
+        <td>Finite N, known K successes</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="alert alert-tip">
+    <span class="alert-icon">💡</span>
+    <div><strong>Golden Rule:</strong> If the problem says "drawn <em>without replacement</em>" from a finite population and you know the exact counts — use <strong>Hypergeometric</strong>. If "with replacement" or independent trials — use Binomial (or Negative Binomial if counting trials to a fixed # of successes).</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- BINOMIAL -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="binomial">
+  <h2><span class="dot"></span>Binomial Distribution</h2>
+
+  <div class="wh-grid">
+    <div class="wh-card wh-when">
+      <h4>✅ When to Use</h4>
+      <ul>
+        <li>Fixed number of trials: <strong>n</strong></li>
+        <li>Each trial is a <em>success</em> or <em>failure</em></li>
+        <li>Probability of success <strong>p</strong> is constant every trial</li>
+        <li>Trials are <strong>independent</strong></li>
+        <li>You are counting <strong># of successes</strong></li>
+      </ul>
+    </div>
+    <div class="wh-card wh-how">
+      <h4>⚙️ How to Apply</h4>
+      <ol>
+        <li>Identify n (# trials) and p (success probability)</li>
+        <li>Identify x (# successes you care about)</li>
+        <li>Check: is p constant? Are trials independent?</li>
+        <li>Plug into PMF below</li>
+        <li>For ranges: sum multiple PMF values or use complement</li>
+      </ol>
+    </div>
+  </div>
+
+  <h3>Core Formulas</h3>
+
+  <div class="formula">
+    <div class="label">PMF — Probability Mass Function</div>
+    <div class="eq">P(X = x) = C(n, x) · p<sup>x</sup> · (1 - p)<sup>n - x</sup></div>
+    <br>
+    <div class="comment">Where:  x = 0, 1, 2, ..., n</div>
+    <div class="comment">C(n, x) = n! / [x! · (n-x)!]  ← "n choose x"</div>
+    <div class="comment">p = probability of success on one trial</div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="ic-label">Expected Value (Mean)</div>
+      <div class="ic-val">E[X] = n · p</div>
+    </div>
+    <div class="info-card">
+      <div class="ic-label">Variance</div>
+      <div class="ic-val">Var(X) = n · p · (1 - p)</div>
+    </div>
+    <div class="info-card">
+      <div class="ic-label">Standard Deviation</div>
+      <div class="ic-val">SD(X) = √(n · p · (1 - p))</div>
+    </div>
+    <div class="info-card">
+      <div class="ic-label">Support</div>
+      <div class="ic-val">x ∈ {0, 1, 2, …, n}</div>
+    </div>
+  </div>
+
+  <div class="alert alert-warn">
+    <span class="alert-icon">⚠️</span>
+    <div><strong>Common Mistake:</strong> Forgetting the binomial coefficient C(n,x). It counts the number of <em>arrangements</em> of x successes in n trials. Without it, you're only computing one specific arrangement.</div>
+  </div>
+
+  <h3>Worked Examples</h3>
+
+  <!-- EASY -->
+  <div class="example">
+    <div class="ex-header" onclick="toggleEx(this)">
+      <span class="ex-tag tag-easy">EASY</span>
+      <span class="ex-title">Fair coin — probability of exactly 3 heads in 5 flips</span>
+      <span class="ex-arrow">▼</span>
+    </div>
+    <div class="ex-body">
+      <p><strong>Setup:</strong> Flip a fair coin 5 times. Find P(X = 3).</p>
+      <div class="step"><div class="step-num">1</div><div class="step-content">Identify parameters: <strong>n = 5</strong>, <strong>p = 0.5</strong>, <strong>x = 3</strong>. ✅ Fixed trials, independent, binary outcome.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">Compute the binomial coefficient: C(5,3) = 5! / (3! · 2!) = (5 · 4) / (2 · 1) = <strong>10</strong></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">P(X = 3) = C(5,3) · (0.5)<sup>3</sup> · (0.5)<sup>2</sup> = 10 · 0.125 · 0.25 = 10 · 0.03125</div></div>
+      <div class="answer"><span>P(X = 3) = 0.3125 → 31.25%</span></div>
+      <p style="margin-top:0.8rem"><strong>Intuition:</strong> E[X] = 5(0.5) = 2.5, so 3 heads is just above average — makes sense it's the most common value.</p>
+    </div>
+  </div>
+
+  <!-- MEDIUM -->
+  <div class="example">
+    <div class="ex-header" onclick="toggleEx(this)">
+      <span class="ex-tag tag-med">MEDIUM</span>
+      <span class="ex-title">Quality control — at least 2 defective items in a batch of 8</span>
+      <span class="ex-arrow">▼</span>
+    </div>
+    <div class="ex-body">
+      <p><strong>Setup:</strong> A factory produces items with a 15% defect rate. A batch of 8 is inspected. Find P(X ≥ 2).</p>
+      <div class="step"><div class="step-num">1</div><div class="step-content">n = 8, p = 0.15. Use the <strong>complement rule</strong>: P(X ≥ 2) = 1 − P(X = 0) − P(X = 1)</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">
+        P(X = 0) = C(8,0) · (0.15)<sup>0</sup> · (0.85)<sup>8</sup> = 1 · 1 · 0.2725 = <strong>0.2725</strong>
+      </div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">
+        P(X = 1) = C(8,1) · (0.15)<sup>1</sup> · (0.85)<sup>7</sup> = 8 · 0.15 · 0.3206 = <strong>0.3847</strong>
+      </div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content">
+        P(X ≥ 2) = 1 − 0.2725 − 0.3847 = 1 − 0.6572
+      </div></div>
+      <div class="answer"><span>P(X ≥ 2) ≈ 0.3428 → 34.28%</span></div>
+    </div>
+  </div>
+
+  <!-- HARD -->
+  <div class="example">
+    <div class="ex-header" onclick="toggleEx(this)">
+      <span class="ex-tag tag-hard">HARD</span>
+      <span class="ex-title">Drug trial — expected value, variance, and a conditional probability</span>
+      <span class="ex-arrow">▼</span>
+    </div>
+    <div class="ex-body">
+      <p><strong>Setup:</strong> A drug is 70% effective. 12 patients receive it. (a) Find E[X] and Var(X). (b) Given at least 1 patient is cured, what is the probability exactly 9 are cured?</p>
+      <div class="step"><div class="step-num">1</div><div class="step-content">n = 12, p = 0.70<br>
+        E[X] = 12 · 0.70 = <strong>8.4</strong><br>
+        Var(X) = 12 · 0.70 · 0.30 = <strong>2.52</strong></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">For part (b), use the conditional formula: P(X = 9 | X ≥ 1) = P(X = 9 and X ≥ 1) / P(X ≥ 1) = P(X = 9) / P(X ≥ 1)</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">
+        P(X = 9) = C(12,9) · (0.7)<sup>9</sup> · (0.3)<sup>3</sup> = 220 · 0.040354 · 0.027 = <strong>0.2397</strong>
+      </div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content">
+        P(X = 0) = (0.3)<sup>12</sup> ≈ 0.000000531 ≈ 0<br>
+        P(X ≥ 1) = 1 − P(X = 0) ≈ <strong>1.0000</strong>
+      </div></div>
+      <div class="answer"><span>P(X = 9 | X ≥ 1) ≈ 0.2397 / 1.0000 ≈ 0.2397</span></div>
+      <p style="margin-top:0.8rem">Since P(X=0) is essentially 0, the conditional barely changes the answer — but the technique matters for cases where P(X=0) is non-trivial.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- NEGATIVE BINOMIAL -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="negbinom">
+  <h2><span class="dot"></span>Negative Binomial Distribution</h2>
+
+  <div class="alert alert-tip">
+    <span class="alert-icon">💡</span>
+    <div><strong>Core Concept:</strong> You flip the question. Instead of "given n trials, how many successes?" you ask: "how many trials until the r-th success?" or "how many failures before r successes?"</div>
+  </div>
+
+  <div class="wh-grid">
+    <div class="wh-card wh-when">
+      <h4>✅ When to Use</h4>
+      <ul>
+        <li>Waiting for the <strong>r-th success</strong> (r is fixed)</li>
+        <li>Counting <strong>total trials</strong> OR <strong># failures</strong> until r-th success</li>
+        <li>Trials are independent with constant p</li>
+        <li>The r-th success MUST occur on the last trial</li>
+      </ul>
+    </div>
+    <div class="wh-card wh-how">
+      <h4>⚙️ How to Apply</h4>
+      <ol>
+        <li>Identify r (# successes desired) and p</li>
+        <li>Decide: is x = total trials OR x = # failures?</li>
+        <li>Apply the correct version of the PMF</li>
+        <li>Note: the last trial is <em>always</em> a success</li>
+      </ol>
+    </div>
+  </div>
+
+  <h3>Two Common Parameterizations</h3>
+
+  <div class="formula">
+    <div class="label">Version A — X = Total Number of Trials to get r successes</div>
+    <div class="eq">P(X = x) = C(x - 1, r - 1) · p<sup>r</sup> · (1 - p)<sup>x - r</sup></div>
+    <div class="comment">x = r, r+1, r+2, ...  (x must be at least r)</div>
+    <div class="comment">Logic: Among the first (x-1) trials, exactly (r-1) were successes — the x-th trial is the r-th success.</div>
+  </div>
+
+  <div class="formula">
+    <div class="label">Version B — Y = Number of Failures before the r-th success  (Y = X - r)</div>
+    <div class="eq">P(Y = y) = C(y + r - 1, y) · p<sup>r</sup> · (1 - p)<sup>y</sup></div>
+    <div class="comment">y = 0, 1, 2, ...  (Note: C(y+r-1, y) = C(y+r-1, r-1))</div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="ic-label">E[X] — Total trials</div>
+      <div class="ic-val">E[X] = r / p</div>
+    </div>
+    <div class="info-card">
+      <div class="ic-label">Var(X) — Total trials</div>
+      <div class="ic-val">Var(X) = r(1-p) / p²</div>
+    </div>
+    <div class="info-card">
+      <div class="ic-label">E[Y] — # failures</div>
+      <div class="ic-val">E[Y] = r(1-p) / p</div>
+    </div>
+    <div class="info-card">
+      <div class="ic-label">Var(Y) — # failures</div>
+      <div class="ic-val">Var(Y) = r(1-p) / p²</div>
+    </div>
+  </div>
+
+  <div class="alert alert-warn">
+    <span class="alert-icon">⚠️</span>
+    <div><strong>Watch Out:</strong> Variance is the same for both X and Y, but the means differ by r. Also: when r = 1, you get the <strong>Geometric distribution</strong> — a special case of Negative Binomial!</div>
+  </div>
+
+  <h3>Worked Examples</h3>
+
+  <div class="example">
+    <div class="ex-header" onclick="toggleEx(this)">
+      <span class="ex-tag tag-easy">EASY</span>
+      <span class="ex-title">Basketball — probability 5th free throw is the 3rd make (p = 0.8)</span>
+      <span class="ex-arrow">▼</span>
+    </div>
+    <div class="ex-body">
+      <p><strong>Setup:</strong> A player makes free throws with probability 0.8. What is P(3rd make occurs on the 5th attempt)?</p>
+      <div class="step"><div class="step-num">1</div><div class="step-content">Use Version A. r = 3, p = 0.8, x = 5 (total trials). The 5th shot must be a make, and among the first 4 shots, exactly 2 were makes.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">P(X = 5) = C(5-1, 3-1) · (0.8)<sup>3</sup> · (0.2)<sup>5-3</sup> = C(4,2) · (0.8)<sup>3</sup> · (0.2)<sup>2</sup></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">= 6 · 0.512 · 0.04 = 6 · 0.02048</div></div>
+      <div class="answer"><span>P(X = 5) = 0.12288 ≈ 12.29%</span></div>
+    </div>
+  </div>
+
+  <div class="example">
+    <div class="ex-header" onclick="toggleEx(this)">
+      <span class="ex-tag tag-med">MEDIUM</span>
+      <span class="ex-title">Sales calls — expected calls until 4th sale, p = 0.3</span>
+      <span class="ex-arrow">▼</span>
+    </div>
+    <div class="ex-body">
+      <p><strong>Setup:</strong> A salesperson closes a deal with probability 0.3 per call. Find (a) the expected # of calls until the 4th sale, and (b) the variance.</p>
+      <div class="step"><div class="step-num">1</div><div class="step-content">r = 4, p = 0.3. Use Version A formulas.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">E[X] = r / p = 4 / 0.3 = <strong>13.33 calls</strong></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">Var(X) = r(1-p) / p² = 4 · 0.7 / 0.09 = 2.8 / 0.09 = <strong>31.11</strong></div></div>
+      <div class="answer"><span>E[X] ≈ 13.33 calls &nbsp;|&nbsp; Var(X) ≈ 31.11</span></div>
+      <p style="margin-top:0.8rem">Intuition: Each sale takes on average 1/p = 3.33 calls, so 4 sales ≈ 13.33 calls. Makes sense!</p>
+    </div>
+  </div>
+
+  <div class="example">
+    <div class="ex-header" onclick="toggleEx(this)">
+      <span class="ex-tag tag-hard">HARD</span>
+      <span class="ex-title">Quality inspection — P(more than 5 failures before 3rd pass), p = 0.6</span>
+      <span class="ex-arrow">▼</span>
+    </div>
+    <div class="ex-body">
+      <p><strong>Setup:</strong> Items pass quality check with p = 0.6. Find P(Y > 5) where Y = # failures before the 3rd pass.</p>
+      <div class="step"><div class="step-num">1</div><div class="step-content">Use Version B. r = 3, p = 0.6. P(Y > 5) = 1 − P(Y ≤ 5) = 1 − [P(Y=0) + P(Y=1) + … + P(Y=5)]</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">General formula: P(Y = y) = C(y+2, y) · (0.6)<sup>3</sup> · (0.4)<sup>y</sup> = C(y+2, 2) · 0.216 · (0.4)<sup>y</sup></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">
+        P(Y=0) = C(2,0)·0.216·1 = 1·0.216 = 0.21600<br>
+        P(Y=1) = C(3,1)·0.216·0.4 = 3·0.0864 = 0.25920<br>
+        P(Y=2) = C(4,2)·0.216·0.16 = 6·0.03456 = 0.20736<br>
+        P(Y=3) = C(5,3)·0.216·0.064 = 10·0.013824 = 0.13824<br>
+        P(Y=4) = C(6,4)·0.216·0.0256 = 15·0.0055296 = 0.082944<br>
+        P(Y=5) = C(7,5)·0.216·0.01024 = 21·0.0022118 = 0.046450
+      </div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content">P(Y ≤ 5) = 0.21600 + 0.25920 + 0.20736 + 0.13824 + 0.08294 + 0.04645 = 0.95019</div></div>
+      <div class="answer"><span>P(Y > 5) = 1 − 0.95019 ≈ 0.0498 → ~5%</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- POISSON -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="poisson">
+  <h2><span class="dot"></span>Poisson Distribution</h2>
+
+  <div class="wh-grid">
+    <div class="wh-card wh-when">
+      <h4>✅ When to Use</h4>
+      <ul>
+        <li>Counting events in a <strong>fixed interval</strong> of time or space</li>
+        <li>Events occur <strong>independently</strong></li>
+        <li>Events occur at a <strong>constant average rate λ</strong></li>
+        <li>Two events cannot occur at the <em>exact</em> same moment</li>
+        <li>Also: large n, small p Binomial → approximate with Poisson (λ = np)</li>
+      </ul>
+    </div>
+    <div class="wh-card wh-how">
+      <h4>⚙️ How to Apply</h4>
+      <ol>
+        <li>Identify the rate λ for the given interval</li>
+        <li>If interval changes: <strong>scale λ proportionally</strong></li>
+        <li>Plug into PMF below</li>
+        <li>For cumulative: sum or use complement</li>
+      </ol>
+    </div>
+  </div>
+
+  <h3>Core Formulas</h3>
+
+  <div class="formula">
+    <div class="label">PMF — Probability Mass Function</div>
+    <div class="eq">P(X = x) = (e<sup>−λ</sup> · λ<sup>x</sup>) / x!</div>
+    <br>
+    <div class="comment">Where:  x = 0, 1, 2, ...  (no upper limit!)</div>
+    <div class="comment">λ = average rate of events per interval (must be > 0)</div>
+    <div class="comment">e ≈ 2.71828</div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="ic-label">Expected Value (Mean)</div>
+      <div class="ic-val">E[X] = λ</div>
+    </div>
+    <div class="info-card">
+      <div class="ic-label">Variance</div>
+      <div class="ic-val">Var(X) = λ</div>
+    </div>
+    <div class="info-card">
+      <div class="ic-label">Standard Deviation</div>
+      <div class="ic-val">SD(X) = √λ</div>
+    </div>
+    <div class="info-card">
+      <div class="ic-label">Support</div>
+      <div class="ic-val">x ∈ {0, 1, 2, 3, …}</div>
+    </div>
+  </div>
+
+  <div class="alert alert-tip">
+    <span class="alert-icon">💡</span>
+    <div><strong>Key Insight:</strong> In Poisson, <strong>mean = variance = λ</strong>. This is unique and a hallmark of the distribution. If you see a problem where they tell you both mean and variance and they're equal — it's almost certainly Poisson.</div>
+  </div>
+
+  <h4>Scaling Lambda Across Intervals</h4>
+  <div class="formula">
+    <div class="label">Rate Scaling Rule</div>
+    <div class="eq">If rate is λ per T units, then for t units: λ_new = λ · (t / T)</div>
+    <div class="comment">Example: 3 arrivals/hour → for 2 hours: λ = 3 · 2 = 6</div>
+    <div class="comment">Example: 12 calls/hour → for 20 min (=1/3 hr): λ = 12 · (1/3) = 4</div>
+  </div>
+
+  <h3>Worked Examples</h3>
+
+  <div class="example">
+    <div class="ex-header" onclick="toggleEx(this)">
+      <span class="ex-tag tag-easy">EASY</span>
+      <span class="ex-title">Emails — P(exactly 3 emails in an hour), λ = 5</span>
+      <span class="ex-arrow">▼</span>
+    </div>
+    <div class="ex-body">
+      <p><strong>Setup:</strong> You receive an average of 5 emails per hour. Find P(X = 3).</p>
+      <div class="step"><div class="step-num">1</div><div class="step-content">λ = 5, x = 3. The events (emails) are independent and occur at a constant average rate.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">P(X = 3) = (e<sup>−5</sup> · 5<sup>3</sup>) / 3! = (0.006738 · 125) / 6</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">= 0.84224 / 6 = 0.14037</div></div>
+      <div class="answer"><span>P(X = 3) ≈ 0.1404 → 14.04%</span></div>
+    </div>
+  </div>
+
+  <div class="example">
+    <div class="ex-header" onclick="toggleEx(this)">
+      <span class="ex-tag tag-med">MEDIUM</span>
+      <span class="ex-title">Car accidents — P(at most 2 in a 30-min period), λ = 2/hr</span>
+      <span class="ex-arrow">▼</span>
+    </div>
+    <div class="ex-body">
+      <p><strong>Setup:</strong> Accidents occur at a rate of 2 per hour. Find P(X ≤ 2) in a 30-minute window.</p>
+      <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Scale λ:</strong> 30 min = 0.5 hours. λ_new = 2 · 0.5 = <strong>1</strong></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">P(X ≤ 2) = P(X=0) + P(X=1) + P(X=2)</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">
+        P(X=0) = e<sup>−1</sup> · 1<sup>0</sup> / 0! = 0.3679<br>
+        P(X=1) = e<sup>−1</sup> · 1<sup>1</sup> / 1! = 0.3679<br>
+        P(X=2) = e<sup>−1</sup> · 1<sup>2</sup> / 2! = 0.1839
+      </div></div>
+      <div class="answer"><span>P(X ≤ 2) = 0.3679 + 0.3679 + 0.1839 = 0.9197 → 91.97%</span></div>
+    </div>
+  </div>
+
+  <div class="example">
+    <div class="ex-header" onclick="toggleEx(this)">
+      <span class="ex-tag tag-hard">HARD</span>
+      <span class="ex-title">Call center — P(wait more than 2 minutes between calls), λ = 3/min (Poisson process insight)</span>
+      <span class="ex-arrow">▼</span>
+    </div>
+    <div class="ex-body">
+      <p><strong>Setup:</strong> Calls arrive at rate λ = 3 per minute. What is P(no calls in next 2 minutes)? Also find E[X] and Var(X) over 4 minutes.</p>
+      <div class="step"><div class="step-num">1</div><div class="step-content">For "no calls in 2 minutes": scale λ to the 2-minute window. λ_2 = 3 · 2 = <strong>6</strong></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">P(X = 0 in 2 min) = e<sup>−6</sup> · 6<sup>0</sup> / 0! = e<sup>−6</sup> = <strong>0.00248</strong> → only 0.25% chance!</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">Over 4 minutes: λ_4 = 3 · 4 = 12<br>
+        E[X] = λ_4 = <strong>12 calls</strong><br>
+        Var(X) = λ_4 = <strong>12</strong></div></div>
+      <div class="answer"><span>P(no calls in 2 min) ≈ 0.00248 &nbsp;|&nbsp; E[X] = 12, Var(X) = 12 over 4 min</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- HYPERGEOMETRIC -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="hypergeo">
+  <h2><span class="dot"></span>Hypergeometric Distribution</h2>
+
+  <div class="alert alert-tip">
+    <span class="alert-icon">💡</span>
+    <div><strong>Key Distinction from Binomial:</strong> The population is <em>finite</em> and you're sampling <em>without replacement</em>. Each draw changes the probability for the next draw. You MUST know the total population N and the number of "success" items K.</div>
+  </div>
+
+  <div class="wh-grid">
+    <div class="wh-card wh-when">
+      <h4>✅ When to Use</h4>
+      <ul>
+        <li>Finite population of size <strong>N</strong></li>
+        <li>K "successes" in the population (known)</li>
+        <li>Sampling <strong>n items WITHOUT replacement</strong></li>
+        <li>Counting X = # successes in the sample</li>
+        <li>Keywords: "committee," "batch," "deck of cards," "chosen from group"</li>
+      </ul>
+    </div>
+    <div class="wh-card wh-how">
+      <h4>⚙️ How to Apply</h4>
+      <ol>
+        <li>Identify N (population), K (# successes in pop.), n (sample size)</li>
+        <li>Check range: max(0, n+K-N) ≤ x ≤ min(n, K)</li>
+        <li>Compute three separate combinations, then divide</li>
+        <li>Numerator: (ways to choose successes) × (ways to choose failures)</li>
+      </ol>
+    </div>
+  </div>
+
+  <h3>Core Formulas</h3>
+
+  <div class="formula">
+    <div class="label">PMF — Probability Mass Function</div>
+    <div class="eq">P(X = x) = [C(K, x) · C(N-K, n-x)] / C(N, n)</div>
+    <br>
+    <div class="comment">N = total population size</div>
+    <div class="comment">K = number of success items in population</div>
+    <div class="comment">n = number of items drawn (sample size)</div>
+    <div class="comment">x = number of successes in the sample</div>
+    <div class="comment">Valid range: max(0, n+K-N) ≤ x ≤ min(n, K)</div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="ic-label">Expected Value (Mean)</div>
+      <div class="ic-val">E[X] = n · (K / N)</div>
+    </div>
+    <div class="info-card">
+      <div class="ic-label">Variance</div>
+      <div class="ic-val">Var(X) = n · (K/N) · (1 - K/N) · [(N-n)/(N-1)]</div>
+    </div>
+    <div class="info-card">
+      <div class="ic-label">Finite Population Correction</div>
+      <div class="ic-val">(N-n) / (N-1)  ← always &lt; 1</div>
+    </div>
+    <div class="info-card">
+      <div class="ic-label">Comparison to Binomial</div>
+      <div class="ic-val">Var_Hyper = Var_Binom · [(N-n)/(N-1)]</div>
+    </div>
+  </div>
+
+  <div class="alert alert-warn">
+    <span class="alert-icon">⚠️</span>
+    <div><strong>Finite Population Correction Factor (FPC):</strong> The variance is always smaller than the Binomial variance because without replacement, knowing what you've already drawn gives you information about what's left. As N → ∞, FPC → 1 and Hypergeometric approaches Binomial.</div>
+  </div>
+
+  <h3>Worked Examples</h3>
+
+  <div class="example">
+    <div class="ex-header" onclick="toggleEx(this)">
+      <span class="ex-tag tag-easy">EASY</span>
+      <span class="ex-title">Deck of cards — P(exactly 2 aces in a 5-card hand)</span>
+      <span class="ex-arrow">▼</span>
+    </div>
+    <div class="ex-body">
+      <p><strong>Setup:</strong> From a standard 52-card deck (4 aces), deal 5 cards. Find P(X = 2 aces).</p>
+      <div class="step"><div class="step-num">1</div><div class="step-content">N = 52, K = 4 (aces), n = 5 (cards dealt), x = 2. Without replacement → Hypergeometric.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">P(X = 2) = [C(4,2) · C(48,3)] / C(52,5)</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">
+        C(4,2) = 6<br>
+        C(48,3) = 48!/(3!·45!) = (48·47·46)/(6) = 17,296<br>
+        C(52,5) = 52!/(5!·47!) = (52·51·50·49·48)/120 = 2,598,960
+      </div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content">P(X=2) = (6 · 17,296) / 2,598,960 = 103,776 / 2,598,960</div></div>
+      <div class="answer"><span>P(X = 2) ≈ 0.03993 → ~3.99%</span></div>
+    </div>
+  </div>
+
+  <div class="example">
+    <div class="ex-header" onclick="toggleEx(this)">
+      <span class="ex-tag tag-med">MEDIUM</span>
+      <span class="ex-title">Committee — E[X] and Var(X) for women selected</span>
+      <span class="ex-arrow">▼</span>
+    </div>
+    <div class="ex-body">
+      <p><strong>Setup:</strong> A group of 20 people has 8 women and 12 men. A committee of 5 is chosen at random. Find E[X] and Var(X) where X = # women on committee.</p>
+      <div class="step"><div class="step-num">1</div><div class="step-content">N = 20, K = 8 (women), n = 5, x = women selected.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">E[X] = n · (K/N) = 5 · (8/20) = 5 · 0.4 = <strong>2.0 women</strong></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">
+        Var(X) = n · (K/N) · (1 - K/N) · (N-n)/(N-1)<br>
+        = 5 · 0.4 · 0.6 · (15/19)<br>
+        = 5 · 0.4 · 0.6 · 0.7895<br>
+        = 1.2 · 0.7895
+      </div></div>
+      <div class="answer"><span>E[X] = 2.0 &nbsp;|&nbsp; Var(X) ≈ 0.9474</span></div>
+      <p style="margin-top:0.8rem"><strong>Note:</strong> Binomial Var would be 5(0.4)(0.6) = 1.2, which is larger. The FPC = 15/19 ≈ 0.789 reduces variance because sampling without replacement limits how extreme the outcomes can be.</p>
+    </div>
+  </div>
+
+  <div class="example">
+    <div class="ex-header" onclick="toggleEx(this)">
+      <span class="ex-tag tag-hard">HARD</span>
+      <span class="ex-title">Lot inspection — P(X ≥ 2 defectives) from batch of 20</span>
+      <span class="ex-arrow">▼</span>
+    </div>
+    <div class="ex-body">
+      <p><strong>Setup:</strong> A lot has 20 items, 4 of which are defective. An inspector randomly selects 6 items without replacement. Find P(X ≥ 2 defectives).</p>
+      <div class="step"><div class="step-num">1</div><div class="step-content">N = 20, K = 4, n = 6. Use complement: P(X ≥ 2) = 1 − P(X=0) − P(X=1)</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">
+        P(X=0) = [C(4,0) · C(16,6)] / C(20,6) = [1 · 8008] / 38760 = <strong>0.2066</strong>
+      </div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">
+        P(X=1) = [C(4,1) · C(16,5)] / C(20,6) = [4 · 4368] / 38760 = 17472/38760 = <strong>0.4508</strong>
+      </div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content">
+        C(20,6) = 20!/(6!·14!) = 38,760<br>
+        C(16,6) = 8,008 &nbsp;|&nbsp; C(16,5) = 4,368
+      </div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content">P(X ≥ 2) = 1 − 0.2066 − 0.4508 = 1 − 0.6574</div></div>
+      <div class="answer"><span>P(X ≥ 2) ≈ 0.3426 → ~34.26%</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- COMPARISON TABLE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="compare">
+  <h2><span class="dot" style="background:var(--muted)"></span>Side-by-Side Master Comparison</h2>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th style="color:var(--accent)">Binomial</th>
+        <th style="color:var(--accent3)">Neg. Binomial</th>
+        <th style="color:var(--accent2)">Poisson</th>
+        <th style="color:var(--accent4)">Hypergeometric</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Parameters</td>
+        <td>n, p</td>
+        <td>r, p</td>
+        <td>λ</td>
+        <td>N, K, n</td>
+      </tr>
+      <tr>
+        <td>X represents</td>
+        <td># successes in n trials</td>
+        <td># trials (or failures) until r-th success</td>
+        <td># events in interval</td>
+        <td># successes in sample of n</td>
+      </tr>
+      <tr>
+        <td>PMF</td>
+        <td>C(n,x)·p^x·(1-p)^(n-x)</td>
+        <td>C(x-1,r-1)·p^r·(1-p)^(x-r)</td>
+        <td>e^(-λ)·λ^x / x!</td>
+        <td>[C(K,x)·C(N-K,n-x)] / C(N,n)</td>
+      </tr>
+      <tr>
+        <td>E[X]</td>
+        <td>np</td>
+        <td>r/p</td>
+        <td>λ</td>
+        <td>n(K/N)</td>
+      </tr>
+      <tr>
+        <td>Var(X)</td>
+        <td>np(1-p)</td>
+        <td>r(1-p)/p²</td>
+        <td>λ</td>
+        <td>n·(K/N)·(1-K/N)·(N-n)/(N-1)</td>
+      </tr>
+      <tr>
+        <td>Replacement?</td>
+        <td>Yes / independent</td>
+        <td>Yes / independent</td>
+        <td>N/A</td>
+        <td>NO — without replacement</td>
+      </tr>
+      <tr>
+        <td>Fixed n?</td>
+        <td>Yes</td>
+        <td>No — n varies</td>
+        <td>No — n not defined</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <td>Special case</td>
+        <td>Hypergeometric → Binomial as N→∞</td>
+        <td>r=1 → Geometric</td>
+        <td>Binomial → Poisson when n large, p small</td>
+        <td>Binomial when N very large</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- FLASHCARDS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="flashcards">
+  <h2><span class="dot" style="background:var(--accent3)"></span>Flashcards</h2>
+  <p style="color:var(--muted);margin-bottom:1rem">Click a card to reveal the answer.</p>
+
+  <div class="fc-grid">
+    <div class="fc" onclick="this.classList.toggle('flipped')">
+      <div class="fc-inner">
+        <div class="fc-front"><div class="fc-q">What are the 4 conditions for a Binomial distribution?</div><div class="fc-hint">↩ flip</div></div>
+        <div class="fc-back"><div class="fc-a">1. Fixed n trials<br>2. Binary outcomes<br>3. Constant p<br>4. Independent trials</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flipped')">
+      <div class="fc-inner">
+        <div class="fc-front"><div class="fc-q">What does the binomial coefficient C(n,x) represent intuitively?</div><div class="fc-hint">↩ flip</div></div>
+        <div class="fc-back"><div class="fc-a">The number of ways to arrange x successes among n trials — it accounts for all possible orderings of the same outcome.</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flipped')">
+      <div class="fc-inner">
+        <div class="fc-front"><div class="fc-q">How does Negative Binomial differ from Binomial in what's "fixed" vs "variable"?</div><div class="fc-hint">↩ flip</div></div>
+        <div class="fc-back"><div class="fc-a">Binomial: fixed n, variable X (successes).<br>Neg. Binomial: fixed r (successes), variable X (trials needed).</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flipped')">
+      <div class="fc-inner">
+        <div class="fc-front"><div class="fc-q">What is the relationship between Poisson mean and variance?</div><div class="fc-hint">↩ flip</div></div>
+        <div class="fc-back"><div class="fc-a">E[X] = Var(X) = λ. Mean equals variance — this is unique to the Poisson distribution.</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flipped')">
+      <div class="fc-inner">
+        <div class="fc-front"><div class="fc-q">When can you approximate Binomial with Poisson?</div><div class="fc-hint">↩ flip</div></div>
+        <div class="fc-back"><div class="fc-a">When n is large (n ≥ 20) and p is small (p ≤ 0.05). Set λ = np.</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flipped')">
+      <div class="fc-inner">
+        <div class="fc-front"><div class="fc-q">What is the Finite Population Correction Factor in Hypergeometric and why is it ≤ 1?</div><div class="fc-hint">↩ flip</div></div>
+        <div class="fc-back"><div class="fc-a">(N-n)/(N-1). It's ≤ 1 because without replacement, successive draws are negatively correlated — this reduces variability compared to Binomial.</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flipped')">
+      <div class="fc-inner">
+        <div class="fc-front"><div class="fc-q">If r = 1 in the Negative Binomial, what distribution do you get?</div><div class="fc-hint">↩ flip</div></div>
+        <div class="fc-back"><div class="fc-a">Geometric distribution — counting trials until the first success.</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flipped')">
+      <div class="fc-inner">
+        <div class="fc-front"><div class="fc-q">Why does the last trial in Negative Binomial ALWAYS have to be a success?</div><div class="fc-hint">↩ flip</div></div>
+        <div class="fc-back"><div class="fc-a">By definition: we STOP when the r-th success occurs. So whatever trial we stop on must be a success — otherwise we'd have stopped earlier or later.</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flipped')">
+      <div class="fc-inner">
+        <div class="fc-front"><div class="fc-q">What is the valid range of x in the Hypergeometric distribution?</div><div class="fc-hint">↩ flip</div></div>
+        <div class="fc-back"><div class="fc-a">max(0, n+K-N) ≤ x ≤ min(n, K)<br>Lower bound: might be forced to pick some successes. Upper bound: limited by sample or population success count.</div></div>
+      </div>
+    </div>
+    <div class="fc" onclick="this.classList.toggle('flipped')">
+      <div class="fc-inner">
+        <div class="fc-front"><div class="fc-q">How do you scale λ in a Poisson problem when the time interval changes?</div><div class="fc-hint">↩ flip</div></div>
+        <div class="fc-back"><div class="fc-a">Scale proportionally: λ_new = λ_original × (new interval / original interval). Always convert to the same units first.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- QUIZ -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="quiz">
+  <h2><span class="dot" style="background:var(--accent5)"></span>Self-Check Quiz</h2>
+  <p style="margin-bottom:1.5rem;color:var(--muted)">Test yourself! Select the best answer for each question, then click Submit.</p>
+
+  <div id="quiz-section">
+    <div class="quiz-q" data-answer="b">
+      <div class="qtext">1. A survey asks 15 people if they prefer cats or dogs. X = # who prefer cats. p = 0.4. Which distribution models X and what is E[X]?</div>
+      <div class="quiz-opt">
+        <label><input type="radio" name="q1" value="a"> Poisson, E[X] = 0.4</label>
+        <label><input type="radio" name="q1" value="b"> Binomial, E[X] = 6.0</label>
+        <label><input type="radio" name="q1" value="c"> Hypergeometric, E[X] = 6.0</label>
+        <label><input type="radio" name="q1" value="d"> Negative Binomial, E[X] = 37.5</label>
+      </div>
+    </div>
+
+    <div class="quiz-q" data-answer="c">
+      <div class="qtext">2. A box has 10 light bulbs: 3 defective, 7 good. You pull 4 without replacement. What distribution models X = # defective bulbs drawn?</div>
+      <div class="quiz-opt">
+        <label><input type="radio" name="q2" value="a"> Binomial(n=4, p=0.3)</label>
+        <label><input type="radio" name="q2" value="b"> Poisson(λ=1.2)</label>
+        <label><input type="radio" name="q2" value="c"> Hypergeometric(N=10, K=3, n=4)</label>
+        <label><input type="radio" name="q2" value="d"> Negative Binomial(r=3, p=0.3)</label>
+      </div>
+    </div>
+
+    <div class="quiz-q" data-answer="d">
+      <div class="qtext">3. A hospital records an average of 4 births per hour. What is P(X = 0 births in the next 30 minutes)?</div>
+      <div class="quiz-opt">
+        <label><input type="radio" name="q3" value="a"> e<sup>−4</sup> ≈ 0.0183</label>
+        <label><input type="radio" name="q3" value="b"> e<sup>−4</sup> · 4 ≈ 0.0733</label>
+        <label><input type="radio" name="q3" value="c"> e<sup>−4</sup> · 2<sup>0</sup> / 0! ≈ 0.0183</label>
+        <label><input type="radio" name="q3" value="d"> e<sup>−2</sup> ≈ 0.1353</label>
+      </div>
+    </div>
+
+    <div class="quiz-q" data-answer="a">
+      <div class="qtext">4. You keep rolling a die until you get three 6's. X = total number of rolls. What is E[X]?</div>
+      <div class="quiz-opt">
+        <label><input type="radio" name="q4" value="a"> 18 (Negative Binomial: E[X] = r/p = 3/(1/6))</label>
+        <label><input type="radio" name="q4" value="b"> 6 (Geometric: E[X] = 1/p)</label>
+        <label><input type="radio" name="q4" value="c"> 3 (Binomial: E[X] = np)</label>
+        <label><input type="radio" name="q4" value="d"> 0.5 (Poisson: E[X] = λ)</label>
+      </div>
+    </div>
+
+    <div class="quiz-q" data-answer="b">
+      <div class="qtext">5. For Binomial(n=10, p=0.5), which expression correctly uses the complement rule to find P(X ≥ 3)?</div>
+      <div class="quiz-opt">
+        <label><input type="radio" name="q5" value="a"> P(X ≥ 3) = P(X = 3) + P(X = 4) ... + P(X = 10)</label>
+        <label><input type="radio" name="q5" value="b"> P(X ≥ 3) = 1 − P(X=0) − P(X=1) − P(X=2)</label>
+        <label><input type="radio" name="q5" value="c"> P(X ≥ 3) = 1 − P(X=3)</label>
+        <label><input type="radio" name="q5" value="d"> P(X ≥ 3) = 1 − P(X ≤ 3)</label>
+      </div>
+    </div>
+
+    <button class="quiz-btn" onclick="gradeQuiz()">Submit Answers</button>
+    <div id="quiz-result"></div>
+  </div>
+</section>
+
+</div><!-- end .page -->
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  // Toggle examples
+  function toggleEx(header) {
+    const body = header.nextElementSibling;
+    const arrow = header.querySelector('.ex-arrow');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+  }
+
+  // Quiz grading
+  function gradeQuiz() {
+    const questions = document.querySelectorAll('.quiz-q');
+    let score = 0;
+    let feedback = '';
+    const explanations = [
+      'Fixed n=15, binary outcome, constant p=0.4, independent → <strong>Binomial</strong>. E[X]=np=15·0.4=6.',
+      'Finite population, known K, sampling WITHOUT replacement → <strong>Hypergeometric</strong>.',
+      'Scale λ: 4/hr × 0.5hr = λ=2. P(X=0) = e<sup>−2</sup> ≈ 0.1353.',
+      'Counting total rolls until 3rd six → <strong>Negative Binomial</strong>. E[X]=r/p=3÷(1/6)=18.',
+      'Complement rule: 1 minus the probability of the complementary event P(X ≤ 2).'
+    ];
+
+    questions.forEach((q, i) => {
+      const selected = q.querySelector(`input[name="q${i+1}"]:checked`);
+      const correct = q.dataset.answer;
+      const labels = q.querySelectorAll('label');
+      labels.forEach(l => { l.style.background = ''; l.style.borderColor = ''; });
+
+      if (selected) {
+        if (selected.value === correct) {
+          score++;
+          selected.closest('label').style.background = 'rgba(52,211,153,0.15)';
+          selected.closest('label').style.borderColor = 'var(--accent4)';
+        } else {
+          selected.closest('label').style.background = 'rgba(248,113,113,0.15)';
+          selected.closest('label').style.borderColor = 'var(--accent5)';
+          // Highlight correct
+          labels.forEach(l => {
+            if (l.querySelector('input').value === correct) {
+              l.style.background = 'rgba(52,211,153,0.1)';
+              l.style.borderColor = 'var(--accent4)';
+            }
+          });
+        }
+      }
+      feedback += `<div style="margin-bottom:0.6rem"><strong>Q${i+1}:</strong> ${explanations[i]}</div>`;
+    });
+
+    document.getElementById('quiz-result').innerHTML =
+      `<div style="margin-bottom:1rem;font-size:1.1rem">Score: <span style="color:var(--accent)">${score}/5</span></div>` +
+      `<div style="color:var(--muted);font-size:0.82rem;line-height:1.8">${feedback}</div>`;
+  }
+
+  // Scroll to top button
+  window.addEventListener('scroll', () => {
+    document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 400);
+  });
+
+  // Active nav link
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a[href^="#"]');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
